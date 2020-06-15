@@ -41,23 +41,6 @@ class BookshelfState extends State<BookshelfScene> with RouteAware {
     });
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context));
-  }
-
-  @override
-  void didPopNext() {
-    Screen.updateStatusBarStyle(SystemUiOverlayStyle.dark);
-  }
-
-  @override
-  void dispose() {
-    routeObserver.unsubscribe(this);
-    super.dispose();
-  }
-
   Future<void> fetchData() async {
     try {
       List<Novel> favoriteNovels = [];
@@ -77,10 +60,12 @@ class BookshelfState extends State<BookshelfScene> with RouteAware {
   Widget buildActions(Color iconColor) {
     return Row(children: <Widget>[
       Container(
+        height: kToolbarHeight,
         width: 44,
         child: Image.asset('img/actionbar_checkin.png', color: iconColor),
       ),
       Container(
+        height: kToolbarHeight,
         width: 44,
         child: Image.asset('img/actionbar_search.png', color: iconColor),
       ),
@@ -158,20 +143,23 @@ class BookshelfState extends State<BookshelfScene> with RouteAware {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: SQColor.white,
-      body: Stack(children: [
-        RefreshIndicator(
-          onRefresh: fetchData,
-          child: ListView(
-            padding: EdgeInsets.only(top: 0),
-            controller: scrollController,
-            children: <Widget>[
-              favoriteNovels.length > 0 ? BookshelfHeader(favoriteNovels[0]) : Container(),
-              buildFavoriteView(),
-            ],
+      body: AnnotatedRegion(
+        value: navAlpha > 0.5 ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light,
+        child: Stack(children: [
+          RefreshIndicator(
+            onRefresh: fetchData,
+            child: ListView(
+              padding: EdgeInsets.only(top: 0),
+              controller: scrollController,
+              children: <Widget>[
+                favoriteNovels.length > 0 ? BookshelfHeader(favoriteNovels[0]) : Container(),
+                buildFavoriteView(),
+              ],
+            ),
           ),
-        ),
-        buildNavigationBar(),
-      ]),
+          buildNavigationBar(),
+        ]),
+      ),
     );
   }
 }

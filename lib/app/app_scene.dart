@@ -8,14 +8,14 @@ class AppScene extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ShuQi',
+      title: '书旗小说',
       navigatorObservers: [routeObserver],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.white,
         dividerColor: Color(0xffeeeeee),
         scaffoldBackgroundColor: SQColor.paper,
-        textTheme: TextTheme(body1: TextStyle(color: SQColor.darkGray)),
+        textTheme: TextTheme(bodyText1: TextStyle(color: SQColor.darkGray)),
       ),
       home: RootScene(),
     );
